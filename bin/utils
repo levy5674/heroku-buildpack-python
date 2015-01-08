@@ -58,8 +58,12 @@ deep-cp() {
 }
 
 # Does some serious moving.
+# sometimes we copy links onto a filesystem that
+# doesn't support them.  go through tar -h 
+# to make extra copies instead
 deep-mv() {
-  deep-cp "$1" "$2"
+  mkdir -p $2
+  pushd $1 && tar -c -h --hard-dereference . | tar x -C $2 && popd
   deep-rm "$1"
 }
 
